@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4990CB8F1CD49A9C0050B803 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4990CB8E1CD49A9C0050B803 /* main.cpp */; };
-		4992EE541CE6177C00C5B507 /* adaptive_mutex.c in Sources */ = {isa = PBXBuildFile; fileRef = 4992EE521CE6177C00C5B507 /* adaptive_mutex.c */; };
+		49FECCBD1CE6390F00259CA7 /* adaptive_mutex.c in Sources */ = {isa = PBXBuildFile; fileRef = 49FECCBB1CE6390F00259CA7 /* adaptive_mutex.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,8 +26,8 @@
 /* Begin PBXFileReference section */
 		4990CB8B1CD49A9C0050B803 /* LockBenchmark */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LockBenchmark; sourceTree = BUILT_PRODUCTS_DIR; };
 		4990CB8E1CD49A9C0050B803 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		4992EE521CE6177C00C5B507 /* adaptive_mutex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adaptive_mutex.c; sourceTree = "<group>"; };
-		4992EE531CE6177C00C5B507 /* adaptive_mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adaptive_mutex.h; sourceTree = "<group>"; };
+		49FECCBB1CE6390F00259CA7 /* adaptive_mutex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adaptive_mutex.c; sourceTree = "<group>"; };
+		49FECCBC1CE6390F00259CA7 /* adaptive_mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adaptive_mutex.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +45,7 @@
 			isa = PBXGroup;
 			children = (
 				4990CB8D1CD49A9C0050B803 /* LockBenchmark */,
+				49FECCBA1CE6390F00259CA7 /* adaptive_mutex */,
 				4990CB8C1CD49A9C0050B803 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,10 +62,17 @@
 			isa = PBXGroup;
 			children = (
 				4990CB8E1CD49A9C0050B803 /* main.cpp */,
-				4992EE531CE6177C00C5B507 /* adaptive_mutex.h */,
-				4992EE521CE6177C00C5B507 /* adaptive_mutex.c */,
 			);
 			path = LockBenchmark;
+			sourceTree = "<group>";
+		};
+		49FECCBA1CE6390F00259CA7 /* adaptive_mutex */ = {
+			isa = PBXGroup;
+			children = (
+				49FECCBB1CE6390F00259CA7 /* adaptive_mutex.c */,
+				49FECCBC1CE6390F00259CA7 /* adaptive_mutex.h */,
+			);
+			path = adaptive_mutex;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -123,8 +131,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49FECCBD1CE6390F00259CA7 /* adaptive_mutex.c in Sources */,
 				4990CB8F1CD49A9C0050B803 /* main.cpp in Sources */,
-				4992EE541CE6177C00C5B507 /* adaptive_mutex.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
