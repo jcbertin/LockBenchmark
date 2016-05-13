@@ -33,7 +33,6 @@
 
 #if __GNUC__
 #define ADAPTIVE_MUTEX_EXPORT extern __attribute__((visibility("default")))
-#define ADAPTIVE_MUTEX_LOCAL extern __attribute__((visibility("hidden")))
 #define ADAPTIVE_MUTEX_INLINE static __inline__
 #define ADAPTIVE_MUTEX_ALWAYS_INLINE __attribute__((__always_inline__))
 #  if __clang__ && __clang_major__ < 3
@@ -44,7 +43,6 @@
 #define ADAPTIVE_MUTEX_NOTHROW __attribute__((__nothrow__))
 #else
 #define ADAPTIVE_MUTEX_EXPORT extern
-#define ADAPTIVE_MUTEX_LOCAL extern
 #define ADAPTIVE_MUTEX_INLINE static inline
 #define ADAPTIVE_MUTEX_ALWAYS_INLINE
 #define ADAPTIVE_MUTEX_NONNULL
@@ -62,31 +60,25 @@ typedef int (*adaptive_mutex_lock_t)(adaptive_mutex_t *mutex);
 
 #define ADAPTIVE_MUTEX_INITIALIZER	{ PTHREAD_MUTEX_INITIALIZER, 0 }
 
-ADAPTIVE_MUTEX_EXPORT ADAPTIVE_MUTEX_NONNULL ADAPTIVE_MUTEX_NOTHROW
-int
-adaptive_mutex_lock(adaptive_mutex_t *mutex);
-
-ADAPTIVE_MUTEX_LOCAL
+ADAPTIVE_MUTEX_EXPORT
 adaptive_mutex_lock_t
 _adaptive_mutex_lock_ptr;
 
-ADAPTIVE_MUTEX_LOCAL
+ADAPTIVE_MUTEX_EXPORT
 dispatch_once_t
 _adaptive_mutex_lock_token;
 
-ADAPTIVE_MUTEX_LOCAL ADAPTIVE_MUTEX_NOTHROW
+ADAPTIVE_MUTEX_EXPORT ADAPTIVE_MUTEX_NOTHROW
 void
 _adaptive_mutex_lock_init(void *context);
 
 ADAPTIVE_MUTEX_INLINE ADAPTIVE_MUTEX_ALWAYS_INLINE ADAPTIVE_MUTEX_NONNULL ADAPTIVE_MUTEX_NOTHROW
 int
-_adaptive_mutex_lock(adaptive_mutex_t *mutex)
+adaptive_mutex_lock(adaptive_mutex_t *mutex)
 {
     dispatch_once_f(&_adaptive_mutex_lock_token, NULL, _adaptive_mutex_lock_init);
     return _adaptive_mutex_lock_ptr(mutex);
 }
-#undef adaptive_mutex_lock
-#define adaptive_mutex_lock _adaptive_mutex_lock
 
 ADAPTIVE_MUTEX_INLINE ADAPTIVE_MUTEX_ALWAYS_INLINE ADAPTIVE_MUTEX_NONNULL ADAPTIVE_MUTEX_NOTHROW
 int

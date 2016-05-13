@@ -25,7 +25,6 @@
  */
 
 #include "adaptive_mutex.h"
-#undef adaptive_mutex_lock
 
 #include <sys/types.h>
 #include <sys/sysctl.h>
@@ -46,19 +45,8 @@ static const long _adaptive_mutex_off_count = 100;
 adaptive_mutex_lock_t _adaptive_mutex_lock_ptr;
 dispatch_once_t _adaptive_mutex_lock_token;
 
-void
-_adaptive_mutex_lock_init(ADAPTIVE_MUTEX_UNUSED void *context)
-{
-    int mib[2] = {CTL_HW, HW_AVAILCPU};
-    int32_t ncpu;
-    size_t size = sizeof(ncpu);
-    if (sysctl(mib, 2, &ncpu, &size, NULL, 0) < 0)
-        ncpu = 0;
-    _adaptive_mutex_lock_ptr = (ncpu < 2) ? (adaptive_mutex_lock_t)pthread_mutex_lock : adaptive_mutex_lock;
-}
-
-int
-adaptive_mutex_lock(adaptive_mutex_t *mutex)
+static int
+_adaptive_mutex_lock(adaptive_mutex_t *mutex)
 {
     assert(mutex);
     
@@ -79,4 +67,15 @@ adaptive_mutex_lock(adaptive_mutex_t *mutex)
         mutex->_spins += (count - mutex->_spins) / 8;
     }
     return 0;
+}
+
+void
+_adaptive_mutex_lock_init(ADAPTIVE_MUTEX_UNUSED void *context)
+{
+    int mib[2] = {CTL_HW, HW_AVAILCPU};
+    int32_t ncpu;
+    size_t size = sizeof(ncpu);
+    if (sysctl(mib, 2, &ncpu, &size, NULL, 0) < 0)
+        ncpu = 0;
+    _adaptive_mutex_lock_ptr = (ncpu < 2) ? (adaptive_mutex_lock_t)pthread_mutex_lock : _adaptive_mutex_lock;
 }
