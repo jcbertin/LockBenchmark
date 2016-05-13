@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4990CB8F1CD49A9C0050B803 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4990CB8E1CD49A9C0050B803 /* main.cpp */; };
+		4992EE541CE6177C00C5B507 /* adaptive_mutex.c in Sources */ = {isa = PBXBuildFile; fileRef = 4992EE521CE6177C00C5B507 /* adaptive_mutex.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		4990CB8B1CD49A9C0050B803 /* LockBenchmark */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LockBenchmark; sourceTree = BUILT_PRODUCTS_DIR; };
 		4990CB8E1CD49A9C0050B803 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		4992EE521CE6177C00C5B507 /* adaptive_mutex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adaptive_mutex.c; sourceTree = "<group>"; };
+		4992EE531CE6177C00C5B507 /* adaptive_mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adaptive_mutex.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				4990CB8E1CD49A9C0050B803 /* main.cpp */,
+				4992EE531CE6177C00C5B507 /* adaptive_mutex.h */,
+				4992EE521CE6177C00C5B507 /* adaptive_mutex.c */,
 			);
 			path = LockBenchmark;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4990CB8F1CD49A9C0050B803 /* main.cpp in Sources */,
+				4992EE541CE6177C00C5B507 /* adaptive_mutex.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +200,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "NDEBUG=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -239,6 +246,7 @@
 				4990CB941CD49A9C0050B803 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

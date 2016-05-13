@@ -32,9 +32,10 @@ list<int> the_list;
 #define USE_SEMAPHORE   2
 #define USE_MUTEX       3
 #define USE_ADAPTIVE_1  4
-#define USE_ADAPTIVE_2  4
+#define USE_ADAPTIVE_2  5
+#define USE_ADAPTIVE_3  6
 
-#define LOCK_KIND       USE_ADAPTIVE_2
+#define LOCK_KIND       USE_ADAPTIVE_3
 #define ADD_LATENCY     0
 
 struct thread_data_t {
@@ -109,9 +110,6 @@ static int adaptive_mutex_lock(adaptive_mutex_t *mutex)
         return pthread_mutex_lock(&mutex->_mutex);
     
     if (pthread_mutex_trylock (&mutex->_mutex) != 0) {
-#if !defined(__i386__) && !defined(__x86_64__)
-        dispatch_once_f(&_max_timeout_token, NULL, _max_timeout_init);
-#endif
         int64_t count = 0;
         const int64_t max_count = MIN(kAdaptiveMaximumCount, mutex->_spins * 2ll + kAdaptiveOffsetCount);
         
@@ -247,6 +245,13 @@ static int adaptive_mutex_unlock(adaptive_mutex_t *mutex)
     
     return pthread_mutex_unlock(&mutex->_mutex);
 }
+
+adaptive_mutex_t _lock = (adaptive_mutex_t) ADAPTIVE_MUTEX_INITIALIZER;
+#define LOCK()			adaptive_mutex_lock(&_lock)
+#define UNLOCK()		adaptive_mutex_unlock(&_lock)
+
+#elif LOCK_KIND == USE_ADAPTIVE_3
+#include "adaptive_mutex.h"
 
 adaptive_mutex_t _lock = (adaptive_mutex_t) ADAPTIVE_MUTEX_INITIALIZER;
 #define LOCK()			adaptive_mutex_lock(&_lock)
