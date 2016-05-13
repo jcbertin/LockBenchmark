@@ -40,8 +40,8 @@
 #define ADAPTIVE_MUTEX_UNUSED
 #endif
 
-static const long _adaptive_mutex_max_count = 1024;
-static const long _adaptive_mutex_off_count = 128;
+static const long _adaptive_mutex_max_count = 1000;
+static const long _adaptive_mutex_off_count = 100;
 
 adaptive_mutex_lock_t _adaptive_mutex_lock_ptr;
 dispatch_once_t _adaptive_mutex_lock_token;
