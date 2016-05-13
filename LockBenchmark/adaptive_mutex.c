@@ -60,7 +60,6 @@ _adaptive_mutex_lock_init(ADAPTIVE_MUTEX_UNUSED void *context)
 int
 adaptive_mutex_lock(adaptive_mutex_t *mutex)
 {
-    int rc = 0;
     assert(mutex);
     
     if (pthread_mutex_trylock (&mutex->_mutex) != 0) {
@@ -71,7 +70,7 @@ adaptive_mutex_lock(adaptive_mutex_t *mutex)
             pthread_yield_np();
             
             if (ADAPTIVE_MUTEX_EXPECT(count++ >= max_count, 0)) {
-                rc = pthread_mutex_lock(&mutex->_mutex);
+                (void) pthread_mutex_lock(&mutex->_mutex);
                 break;
             }
         }
@@ -79,5 +78,5 @@ adaptive_mutex_lock(adaptive_mutex_t *mutex)
         
         mutex->_spins += (count - mutex->_spins) / 8;
     }
-    return rc;
+    return 0;
 }
