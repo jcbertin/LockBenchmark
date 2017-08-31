@@ -105,8 +105,8 @@ typedef struct adaptive_mutex {
 
 #define ADAPTIVE_MUTEX_INITIALIZER	{ PTHREAD_MUTEX_INITIALIZER, 0, 0, 0 }
 
-static const uint64_t kAdaptiveMaximumCount = 1024ll;
-static const uint64_t kAdaptiveOffsetCount = 128ll;
+static const uint64_t kAdaptiveMaximumCount = 1000ll;
+static const uint64_t kAdaptiveOffsetCount = 100ll;
 
 static int              _is_smp;
 static dispatch_once_t  _is_smp_token;
@@ -135,15 +135,14 @@ static int adaptive_mutex_lock(adaptive_mutex_t *mutex)
         const int64_t max_count = MIN(kAdaptiveMaximumCount, mutex->_spins * 2ll + kAdaptiveOffsetCount);
         
         do {
-            pthread_yield_np();
-            
-            if (__builtin_expect(count++ >= max_count, 0)) {
+            if (__builtin_expect(++count >= max_count, 0)) {
                 (void) pthread_mutex_lock(&mutex->_mutex);
                 mutex->_locksCount ++;
                 break;
             }
+            pthread_yield_np();
             
-            mutex->_spinsCount ++;
+            (void) __sync_fetch_and_add(&mutex->_spinsCount, 1);
         }
         while (pthread_mutex_trylock (&mutex->_mutex) != 0);
         
@@ -392,7 +391,9 @@ int main(int argc, const char * argv[])
     printf("Thread #%d: mean latency = %f, count = %llu\n", data[1]._tid, (double)data[1]._cumul_latency / (double)data[1]._count, data[1]._count);
     
 #if LOCK_KIND == USE_ADAPTIVE_1 || LOCK_KIND == USE_ADAPTIVE_2
-    printf("Lock: spins = %llu, spins count = %llu, locks count = %llu\n", _lock._spins, _lock._spinsCount, _lock._locksCount);
+    printf("Lock: spins = %lld, spins count = %llu, locks count = %llu\n", _lock._spins, _lock._spinsCount, _lock._locksCount);
+#elif LOCK_KIND == USE_ADAPTIVE_3
+    printf("Lock: spins = %ld\n", _lock._spins);
 #endif
     
     printf("Result - %ld.%06d\n", tv2.tv_sec - tv1.tv_sec,
