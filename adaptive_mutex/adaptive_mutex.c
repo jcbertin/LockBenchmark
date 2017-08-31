@@ -31,7 +31,7 @@
 
 #if __GNUC__
 #define ADAPTIVE_MUTEX_MIN(a,b)     ({ __typeof__(a) __a = (a); __typeof__(b) __b = (b); __a < __b ? __a : __b; })
-#define ADAPTIVE_MUTEX_EXPECT(a,v)  __builtin_expect((a),(v))
+#define ADAPTIVE_MUTEX_EXPECT(a,v)  __builtin_expect((long)(a),(v))
 #define ADAPTIVE_MUTEX_UNUSED       __attribute__((unused))
 #else
 #define ADAPTIVE_MUTEX_MIN(a,b)     ((a) < (b) ? (a) : (b))
@@ -55,12 +55,11 @@ _adaptive_mutex_lock(adaptive_mutex_t *mutex)
         const long max_count = ADAPTIVE_MUTEX_MIN(_adaptive_mutex_max_count, mutex->_spins * 2 + _adaptive_mutex_off_count);
         
         do {
-            pthread_yield_np();
-            
-            if (ADAPTIVE_MUTEX_EXPECT(count++ >= max_count, 0)) {
+            if (ADAPTIVE_MUTEX_EXPECT(++count >= max_count, 0)) {
                 (void) pthread_mutex_lock(&mutex->_mutex);
                 break;
             }
+            pthread_yield_np();
         }
         while (pthread_mutex_trylock (&mutex->_mutex) != 0);
         
