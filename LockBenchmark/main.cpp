@@ -52,9 +52,10 @@ list<int> the_list;
 #define USE_SPINLOCK    1
 #define USE_SEMAPHORE   2
 #define USE_MUTEX       3
-#define USE_ADAPTIVE_1  4
-#define USE_ADAPTIVE_2  5
-#define USE_ADAPTIVE_3  6
+#define USE_UNFAIR_LOCK 4
+#define USE_ADAPTIVE_1  5
+#define USE_ADAPTIVE_2  6
+#define USE_ADAPTIVE_3  7
 
 #define LOCK_KIND       USE_ADAPTIVE_3
 #define ADD_LATENCY     0
@@ -91,6 +92,13 @@ static __attribute__ ((constructor)) void _initSemaphore()
 pthread_mutex_t _lock = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 #define LOCK()			pthread_mutex_lock(&_lock)
 #define UNLOCK()		pthread_mutex_unlock(&_lock)
+
+#elif LOCK_KIND == USE_UNFAIR_LOCK
+#import <os/lock.h>
+
+os_unfair_lock _lock = OS_UNFAIR_LOCK_INIT;
+#define LOCK()          os_unfair_lock_lock(&_lock)
+#define UNLOCK()        os_unfair_lock_unlock(&_lock)
 
 #elif LOCK_KIND == USE_ADAPTIVE_1
 #include <sys/types.h>
