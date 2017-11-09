@@ -28,6 +28,8 @@
 
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#include <mach/mach_traps.h>
+#include <mach/thread_switch.h>
 
 #if __GNUC__
 #define ADAPTIVE_MUTEX_MIN(a,b)     ({ __typeof__(a) __a = (a); __typeof__(b) __b = (b); __a < __b ? __a : __b; })
@@ -59,7 +61,7 @@ _adaptive_mutex_lock(adaptive_mutex_t *mutex)
                 (void) pthread_mutex_lock(&mutex->_mutex);
                 break;
             }
-            pthread_yield_np();
+            (void) thread_switch(MACH_PORT_NULL, SWITCH_OPTION_DEPRESS, (mach_msg_timeout_t)(count));
         }
         while (pthread_mutex_trylock (&mutex->_mutex) != 0);
         
