@@ -38,7 +38,7 @@
 
 #include <list>
 
-#define LOOPS 10000000
+#define LOOPS 100000000
 #define SLEEP_MAX 300
 #define SLEEP_FACTOR_1 0ull
 #define SLEEP_OFFSET_1 0ull
